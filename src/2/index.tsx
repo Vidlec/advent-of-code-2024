@@ -8,7 +8,6 @@ const remove = <T extends number>(arr: T[], index: number): T[] => {
 }
 
 const isSafe = (remaining: number[], index: number): boolean => {
-  if (index > 10) return true
   const value = remaining[index]
   const prev = remaining[index - 1]
   if (!prev) return isSafe(remaining, index + 1)
@@ -27,7 +26,7 @@ const isSafe = (remaining: number[], index: number): boolean => {
     if (value < prev) return false
   }
 
-  if (index === remaining.length) return true
+  if (index === remaining.length - 1) return true
   return isSafe(remaining, index + 1)
 }
 
