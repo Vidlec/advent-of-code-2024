@@ -19,7 +19,7 @@ const distance = left.reduce((acc, leftValue, index) => {
   return acc + Math.abs(leftValue - rightValue)
 }, 0)
 
-console.log(distance)
+console.log("Part 1: ", distance)
 
 // * PART 2
 
@@ -33,4 +33,4 @@ const similarity = left.reduce((acc, leftValue) => {
   return acc + (leftValue * multiplier)
 }, 0)
 
-console.log(similarity)
+console.log("Part 2: ", similarity)
