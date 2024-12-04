@@ -1,16 +1,18 @@
 const inputFile = Bun.file("src/1/input.txt")
 const inputRaw = await inputFile.text()
 
-let { left, right } = inputRaw.split("\n").reduce((acc, pair) => {
-  const [leftValue, rightValue] = pair.split(" ").filter(Boolean).map(Number)
-  acc.left.push(leftValue)
-  acc.right.push(rightValue) 
-  return acc
-}, { left: [], right: []} as { left: number[], right: number[]})
+let { left, right } = inputRaw.split("\n").reduce(
+  (acc, pair) => {
+    const [leftValue, rightValue] = pair.split(" ").filter(Boolean).map(Number)
+    acc.left.push(leftValue)
+    acc.right.push(rightValue)
+    return acc
+  },
+  { left: [], right: [] } as { left: number[]; right: number[] }
+)
 
 left.sort()
 right.sort()
-
 
 // * PART 1
 
@@ -30,7 +32,7 @@ const appearances = right.reduce((acc, key: number) => {
 
 const similarity = left.reduce((acc, leftValue) => {
   const multiplier = appearances.get(leftValue) ?? 0
-  return acc + (leftValue * multiplier)
+  return acc + leftValue * multiplier
 }, 0)
 
 console.log("Part 2: ", similarity)

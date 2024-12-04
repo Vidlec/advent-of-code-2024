@@ -3,7 +3,8 @@
   "module": "src/1.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prettier": "^3.4.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
