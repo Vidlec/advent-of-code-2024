@@ -98,9 +98,9 @@ const placeObstacles = (
       // * Don't try to place obstacles where we already were
       if (!path.has(`${nextY},${nextX}`)) {
         // * Check for possible loops
-        let newMatrix = matrix.map((line) => [...line])
-        newMatrix[nextY][nextX] = "#"
-        const isLoop = simulatePath(newMatrix, [y, x], direction)
+        matrix[nextY][nextX] = "#"
+        const isLoop = simulatePath(matrix, [y, x], direction)
+        matrix[nextY][nextX] = "."
         if (isLoop) obstacles.add(`${nextY},${nextX}`)
       }
 
