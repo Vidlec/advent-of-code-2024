@@ -7,14 +7,14 @@ const input = inputRaw.split("\n").map((line) => {
 }) as [number, number[]][]
 
 type Operation = "+" | "*" | "||"
-const operations: Operation[] = ["+", "*"]
+let operations: Operation[] = ["*", "+"]
 
 const calc = (a: number, b: number, operation: Operation): number => {
   switch (operation) {
     case "+":
       return a + b
     case "||":
-      return Number(`${a}${b}`)
+      return parseInt(`${a}${b}`, 10)
     case "*":
       return a * b
   }
@@ -34,6 +34,7 @@ const isSolvable = (
   // * Try each operation with the current number
   for (const operation of operations) {
     const nextResult = calc(currentResult, numbers[index], operation)
+    if (nextResult > targetResult) continue // * Bail out early
 
     if (isSolvable(numbers, nextResult, index + 1, targetResult)) {
       return true
@@ -43,6 +44,7 @@ const isSolvable = (
   return false
 }
 
+console.time("elapsed")
 // * PART 1
 const solvablePart1 = input.filter(([result, numbers]) => {
   return isSolvable(numbers, numbers[0], 1, result)
@@ -64,3 +66,4 @@ console.log(
   "Part 1: ",
   solvablePart2.reduce((acc, [target]) => acc + target, 0)
 )
+console.timeEnd("elapsed")
