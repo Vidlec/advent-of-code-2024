@@ -44,8 +44,7 @@ const simulatePath = (
   let visitedVectors = new Set<string>()
 
   while (true) {
-    const key = `${y},${x}`
-    const vector = `${key},${direction}`
+    const vector = `${y},${x},${direction}`
 
     if (visitedVectors.has(vector)) return true // * Loop
     visitedVectors.add(vector)
@@ -56,14 +55,12 @@ const simulatePath = (
     if (!nextCell) return false // * Not a loop
     if (nextCell === "#") {
       direction = nextDirection[direction]
+      continue
     }
 
-    if (nextCell !== "#") {
-      const [moveY, moveX] = move([y, x], direction)
-      y = moveY
-      x = moveX
-      visitedVectors.add(vector)
-    }
+    const [moveY, moveX] = move([y, x], direction)
+    y = moveY
+    x = moveX
   }
 }
 
@@ -72,15 +69,7 @@ const startDirection = matrix[startY][startX] as Direction
 let path = new Set<string>()
 let obstacles = new Set()
 
-const placeObstacles = (
-  matrix: string[][],
-  [startY, startX]: [number, number],
-  startDirection: Direction
-) => {
-  let y = startY
-  let x = startX
-  let direction = startDirection
-
+const placeObstacles = (matrix: string[][], [y, x]: [number, number], direction: Direction) => {
   while (true) {
     const key = `${y},${x}`
     path.add(key)
@@ -94,26 +83,25 @@ const placeObstacles = (
       continue
     }
 
-    if (nextCell !== "#") {
-      // * Don't try to place obstacles where we already were
-      if (!path.has(`${nextY},${nextX}`)) {
-        // * Check for possible loops
-        matrix[nextY][nextX] = "#"
-        const isLoop = simulatePath(matrix, [y, x], direction)
-        matrix[nextY][nextX] = "."
-        if (isLoop) obstacles.add(`${nextY},${nextX}`)
-      }
-
-      const [moveY, moveX] = move([y, x], direction)
-
-      y = moveY
-      x = moveX
+    const nKey = `${nextY},${nextX}`
+    // * Don't try to place obstacles where we already were
+    if (!path.has(nKey)) {
+      // * Check for possible loops
+      matrix[nextY][nextX] = "#"
+      const isLoop = simulatePath(matrix, [y, x], direction)
+      matrix[nextY][nextX] = "."
+      if (isLoop) obstacles.add(nKey)
     }
+
+    const [moveY, moveX] = move([y, x], direction)
+
+    y = moveY
+    x = moveX
   }
 }
 
-console.time("Time")
+console.time("elapsed")
 placeObstacles(matrix, [startY, startX], startDirection)
 console.log("Part 1: ", path.size)
 console.log("Part 2: ", obstacles.size)
-console.timeEnd("Time")
+console.timeEnd("elapsed")
