@@ -56,18 +56,16 @@ const group = (input: (string | number)[]) => {
   input.forEach((value, index) => {
     const groupItem = group[0]
 
-    if (groupItem === undefined) {
-      group.push(value)
-    } else if (groupItem === value) {
-      group.push(value)
-    }
-    if (groupItem !== value && groupItem !== undefined) {
-      result.push(group)
-      group = [value]
-    }
     if (index === input.length - 1) {
       result.push(group)
     }
+
+    if (groupItem === undefined || groupItem === value) {
+      return group.push(value)
+    }
+
+    result.push(group)
+    group = [value]
   })
 
   return result
