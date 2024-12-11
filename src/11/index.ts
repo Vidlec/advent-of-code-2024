@@ -4,6 +4,9 @@ let numbers = inputRaw.split(" ").map((v) => parseInt(v, 10))
 
 type Counts = Map<number, number>
 
+const trySet = (map: Counts, key: number, value: number) =>
+  map.set(key, (map.get(key) ?? 0) + value)
+
 const countNumbers = (iterations: number) => {
   let counts: Counts = new Map()
 
@@ -14,26 +17,22 @@ const countNumbers = (iterations: number) => {
   Array.from({ length: iterations }).forEach(() => {
     let nCounts: Counts = new Map()
 
-    for (const [num, count] of counts.entries()) {
+    counts.entries().forEach(([num, count]) => {
       if (num === 0) {
-        nCounts.set(1, (nCounts.get(1) ?? 0) + count)
-        continue
+        return trySet(nCounts, 1, count)
       }
 
       const numString = num.toString()
       if (numString.length % 2 === 0) {
-        const mid = Math.floor(numString.length / 2)
-        const left = parseInt(numString.slice(0, mid), 10)
-        const right = parseInt(numString.slice(mid), 10)
+        const mid = numString.length / 2
 
-        nCounts.set(left, (nCounts.get(left) ?? 0) + count)
-        nCounts.set(right, (nCounts.get(right) ?? 0) + count)
-        continue
+        trySet(nCounts, parseInt(numString.slice(0, mid), 10), count) // * Left
+        trySet(nCounts, parseInt(numString.slice(mid), 10), count) // * Right
+        return
       }
 
-      const newNum = num * 2024
-      nCounts.set(newNum, (nCounts.get(newNum) ?? 0) + count)
-    }
+      trySet(nCounts, num * 2024, count)
+    })
 
     counts = nCounts
   })
